@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "license": "ISC",
+  "author": "io",
+  "version": "1.0.0",
+  "description": "creative day",
+  "main": "main.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "rm -rf build/ && concurrently \"tsc --watch\" \"nodemon -q build/main.js\""
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.5"
+  },
+  "dependencies": {
+    "@trpc/server": "^10.9.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "ts-node": "^10.9.1",
+    "uuidv4": "^6.2.13",
+    "zod": "^3.14.2"
+  }
+}
