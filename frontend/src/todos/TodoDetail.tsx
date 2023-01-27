@@ -17,7 +17,7 @@ const Container = styled(Card)({
     zIndex: 10,
 });
 
-function Detail({ id }: Props) {
+function TodoDetail({ id }: Props) {
     const todo = useGetTodo(id);
 
     return (
@@ -33,4 +33,4 @@ function Detail({ id }: Props) {
     );
 }
 
-export default Detail;
+export default TodoDetail;
