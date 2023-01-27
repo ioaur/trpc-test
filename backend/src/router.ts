@@ -23,9 +23,15 @@ const trpcRouter = t.router({
         }),
     listTodos: t.procedure.output(Todos).query(() => todos),
     createTodo: t.procedure
-        .input(z.object({ name: z.string().max(50), deadline: z.string().datetime().nullable() }))
+        .input(
+            z.object({
+                name: z.string().max(50),
+                deadline: z.string().datetime().nullable(),
+                details: z.string().nullable(),
+            })
+        )
         .mutation(({ input }) => {
-            const todo: Todo = { id: uuid(), name: input.name, deadline: input.deadline };
+            const todo: Todo = { id: uuid(), name: input.name, deadline: input.deadline, details: input.details };
             todos.push(todo);
             return todo;
         }),

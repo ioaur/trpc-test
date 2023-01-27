@@ -33,6 +33,7 @@ function TodoDetail({ id }: Props) {
             <CardContent>
                 <Information label="Name" value={todo?.name} />
                 <Information label="Deadline" value={formatDate(todo?.deadline)} />
+                <Information label="Details" value={todo?.details} />
             </CardContent>
         </Container>
     );

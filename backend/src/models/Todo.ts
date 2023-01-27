@@ -4,6 +4,7 @@ export const Todo = z.object({
     id: z.string(),
     name: z.string(),
     deadline: z.string().datetime().nullable(),
+    details: z.string().nullable(),
 });
 
 export const Todos = z.array(Todo);

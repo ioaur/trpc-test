@@ -18,15 +18,17 @@ const Container = styled(Card)({
 
 function TodoForm() {
     const [text, setText] = useState("");
+    const [details, setDetails] = useState<string | null>(null);
     const [deadline, setDeadline] = useState<Moment | null>(null);
 
     const { createTodo, errorMessage } = useCreateTodo();
 
     const updateText = (event: ChangeEvent<HTMLInputElement>) => setText(event.target.value);
+    const updateDetails = (event: ChangeEvent<HTMLInputElement>) => setDetails(event.target.value);
     const updateDeadline = (newValue: Moment | null, _: any) => setDeadline(newValue);
 
     const handleCreate = () => {
-        createTodo({ name: text, deadline: deadline?.toDate().toISOString() ?? null });
+        createTodo({ name: text, deadline: deadline?.toDate().toISOString() ?? null, details });
 
         clearForm();
     };
@@ -40,6 +42,7 @@ function TodoForm() {
         <Container>
             <CardContent style={{ display: "flex", justifyContent: "center", gap: 8 }}>
                 <TextField type="text" label="Name" onChange={updateText} value={text} />
+                <TextField type="text" label="Details" onChange={updateDetails} value={details} />
                 <DateTimePicker
                     label="Deadline"
                     value={deadline}
