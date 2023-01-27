@@ -7,43 +7,55 @@ import { createTRPCReact } from "@trpc/react-query";
 import TodoList from "./todos/TodoList";
 import Detail from "./todos/Detail";
 import TodoForm from "./todos/TodoForm";
-import { styled, Typography } from "@mui/material";
+import { styled, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { ParticlesContainer } from "./Particles";
+import theme from "./theme/theme";
+import { AppBar } from "./AppBar";
 
 const BACKEND_URL: string = "http://localhost:8080/todo";
 
 export const trpc = createTRPCReact<TRPCRouter>();
 
-const Container = styled("div")({ display: "flex", flexDirection: "column" });
+const queryClient = new QueryClient();
+const trpcClient = trpc.createClient({
+    links: [
+        httpBatchLink({
+            url: BACKEND_URL,
+        }),
+    ],
+});
+
+const Container = styled("div")({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+});
+
+const Spacer = styled("div")({ height: 100 });
 
 function App() {
-    const [queryClient] = useState(() => new QueryClient());
-    const [trpcClient] = useState(() =>
-        trpc.createClient({
-            links: [
-                httpBatchLink({
-                    url: BACKEND_URL,
-                }),
-            ],
-        })
-    );
-
     const [detailId, setDetailId] = useState("");
 
     return (
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <Container className="App">
-                        <Typography variant="h2" style={{ marginBottom: 20 }}>
-                            Insane Todo
-                        </Typography>
-                        <TodoForm />
-                        <TodoList setDetail={setDetailId} />
-                        {detailId ? <Detail id={detailId} /> : null}
-                    </Container>
-                </LocalizationProvider>
+                <ThemeProvider theme={theme}>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <ParticlesContainer />
+
+                        <AppBar />
+
+                        <Spacer />
+
+                        <Container className="App">
+                            <TodoForm />
+                            <TodoList selectedDetailId={detailId} setDetail={setDetailId} />
+                            <Detail id={detailId} />
+                        </Container>
+                    </LocalizationProvider>
+                </ThemeProvider>
             </QueryClientProvider>
         </trpc.Provider>
     );

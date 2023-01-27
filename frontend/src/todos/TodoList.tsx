@@ -1,58 +1,77 @@
-import { trpc } from "../App";
 import { useDeleteTodo } from "./hooks/useDeleteTodo";
 import { Todo } from "../../../backend/src/models/Todo";
-import { IconButton, List as MuiList, ListItem, ListItemText, styled } from "@mui/material";
-import { Check, Info } from "@mui/icons-material";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    IconButton,
+    List as MuiList,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    styled,
+} from "@mui/material";
+import { useTodos } from "./hooks/useTodos";
+import { ExtinguisherIcon } from "../icons/Extinguisher";
 
-const Container = styled("div")({
+const Container = styled(Card)({
     display: "flex",
     flexDirection: "column",
     marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
+    maxWidth: 500,
+    width: "100%",
+    zIndex: 10,
 });
 
 const List = styled(MuiList)({
-    marginTop: 20,
     width: "100%",
-    maxWidth: 360,
     bgcolor: "background.paper",
 });
 
 interface Props {
+    selectedDetailId: string;
     setDetail: (id: string) => void;
 }
 
-function TodoList({ setDetail }: Props) {
-    const todos = trpc.listTodos.useQuery();
+function TodoList({ selectedDetailId, setDetail }: Props) {
+    const { todos } = useTodos();
 
     const { deleteTodos, errorMessage } = useDeleteTodo();
+
+    const handleDelete = (id: string) => {
+        if (id === selectedDetailId) {
+            setDetail("");
+        }
+        deleteTodos({ id });
+    };
 
     const todoRow = (todo: Todo) => {
         return (
             <ListItem
+                style={{ width: "300px", display: "flex", height: 50 }}
                 key={todo.id}
                 secondaryAction={
-                    <>
-                        <IconButton color="primary" onClick={() => setDetail(todo.id)}>
-                            <Info />
-                        </IconButton>
-                        <IconButton style={{ color: "green" }} onClick={() => deleteTodos({ id: todo.id })}>
-                            <Check />
-                        </IconButton>
-                    </>
+                    <IconButton color="primary" size="large" onClick={() => handleDelete(todo.id)}>
+                        <ExtinguisherIcon fontSize="large" />
+                    </IconButton>
                 }
                 disablePadding
             >
-                <ListItemText primary={todo.name} />
+                <ListItemButton selected={selectedDetailId === todo.id} onClick={() => setDetail(todo.id)}>
+                    <ListItemText primary={todo.name} />
+                </ListItemButton>
             </ListItem>
         );
     };
 
     return (
         <Container>
-            <List>{todos.data && todos.data.map((todo) => todoRow(todo))}</List>
-
+            <CardHeader title="Todos" />
+            <CardContent>
+                <List>{todos.map((todo) => todoRow(todo))}</List>
+            </CardContent>
             <span>{errorMessage}</span>
         </Container>
     );

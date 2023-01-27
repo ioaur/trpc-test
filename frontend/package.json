@@ -23,9 +23,12 @@
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-particles": "^2.8.0",
     "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.6",
+    "tsparticles-engine": "^2.8.0",
+    "tsparticles-preset-fire": "^2.8.0",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0",
     "zod": "^3.14.2"

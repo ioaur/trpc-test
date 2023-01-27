@@ -22,11 +22,13 @@ const trpcRouter = t.router({
             return todo;
         }),
     listTodos: t.procedure.output(Todos).query(() => todos),
-    createTodo: t.procedure.input(z.object({ name: z.string().max(50) })).mutation(({ input }) => {
-        const todo: Todo = { id: uuid(), name: input.name };
-        todos.push(todo);
-        return todo;
-    }),
+    createTodo: t.procedure
+        .input(z.object({ name: z.string().max(50), deadline: z.string().datetime().nullable() }))
+        .mutation(({ input }) => {
+            const todo: Todo = { id: uuid(), name: input.name, deadline: input.deadline };
+            todos.push(todo);
+            return todo;
+        }),
     deleteTodo: t.procedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
         todos = todos.filter((r) => r.id !== input.id);
     }),
