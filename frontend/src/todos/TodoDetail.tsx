@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader, styled, Typography } from "@mui/material";
+import { Card, CardContent as MuiCardContent, CardHeader, styled } from "@mui/material";
 import moment from "moment";
+import { Information } from "../core/Information";
 import { useGetTodo } from "./hooks/useGetTodo";
 
 interface Props {
@@ -17,6 +18,12 @@ const Container = styled(Card)({
     zIndex: 10,
 });
 
+const CardContent = styled(MuiCardContent)({
+    width: "50%",
+    display: "flex",
+    flexDirection: "column",
+});
+
 function TodoDetail({ id }: Props) {
     const todo = useGetTodo(id);
 
@@ -24,13 +31,15 @@ function TodoDetail({ id }: Props) {
         <Container>
             <CardHeader title="Details" />
             <CardContent>
-                <Typography>{todo?.name}</Typography>
-                <Typography>
-                    {todo?.deadline ? moment(todo?.deadline).format("MMMM Do YYYY, h:mm:ss a") : null}
-                </Typography>
+                <Information label="Name" value={todo?.name} />
+                <Information label="Deadline" value={formatDate(todo?.deadline)} />
             </CardContent>
         </Container>
     );
+}
+
+function formatDate(deadline: string | null | undefined): string | null {
+    return deadline ? moment(deadline).format("MMMM Do YYYY, h:mm:ss a") : null;
 }
 
 export default TodoDetail;
